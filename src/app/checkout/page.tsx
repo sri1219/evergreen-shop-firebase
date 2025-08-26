@@ -30,6 +30,9 @@ const formSchema = z.object({
   cvc: z.string().length(3, { message: "CVC must be 3 digits." }),
 });
 
+const SHIPPING_COST = 10;
+const FREE_SHIPPING_THRESHOLD = 100;
+
 export default function CheckoutPage() {
   const { cartItems, cartTotal, clearCart } = useCart();
   const { toast } = useToast();
@@ -70,6 +73,9 @@ export default function CheckoutPage() {
         </div>
     );
   }
+
+  const shippingCost = cartTotal > FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const finalTotal = cartTotal + shippingCost;
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-10">
@@ -169,9 +175,19 @@ export default function CheckoutPage() {
                 ))}
               </div>
               <div className="border-t my-4" />
-              <div className="flex justify-between font-bold text-lg">
-                <span>Total</span>
-                <span>${cartTotal.toFixed(2)}</span>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span>${cartTotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Shipping</span>
+                  <span>{shippingCost > 0 ? `$${shippingCost.toFixed(2)}` : 'Free'}</span>
+                </div>
+                <div className="flex justify-between font-bold text-lg border-t pt-2">
+                  <span>Total</span>
+                  <span>${finalTotal.toFixed(2)}</span>
+                </div>
               </div>
             </CardContent>
           </Card>

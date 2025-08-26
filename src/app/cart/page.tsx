@@ -7,6 +7,9 @@ import CartItem from '@/components/CartItem';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ShoppingBag } from 'lucide-react';
 
+const SHIPPING_COST = 10;
+const FREE_SHIPPING_THRESHOLD = 100;
+
 export default function CartPage() {
   const { cartItems, cartTotal, cartCount } = useCart();
 
@@ -22,6 +25,9 @@ export default function CartPage() {
       </div>
     );
   }
+
+  const shippingCost = cartTotal > FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const finalTotal = cartTotal + shippingCost;
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-10">
@@ -44,11 +50,11 @@ export default function CartPage() {
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>Free</span>
+                <span>{shippingCost > 0 ? `$${shippingCost.toFixed(2)}` : 'Free'}</span>
               </div>
               <div className="flex justify-between font-bold text-lg border-t pt-4">
                 <span>Total</span>
-                <span>${cartTotal.toFixed(2)}</span>
+                <span>${finalTotal.toFixed(2)}</span>
               </div>
             </CardContent>
             <CardFooter>
