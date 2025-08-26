@@ -14,16 +14,16 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary">
+            <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary" data-trigger-loader="true">
               <Leaf className="h-7 w-7" />
               <span>Evergreen Shop</span>
             </Link>
           </div>
           <nav className="flex items-center gap-4">
-            <Link href="/" passHref>
+            <Link href="/" passHref data-trigger-loader="true">
               <Button variant="ghost">Home</Button>
             </Link>
-            <Link href="/cart" passHref>
+            <Link href="/cart" passHref data-trigger-loader="true">
               <Button variant="ghost" className="relative">
                 <ShoppingBag className="h-6 w-6" />
                 {cartCount > 0 && (

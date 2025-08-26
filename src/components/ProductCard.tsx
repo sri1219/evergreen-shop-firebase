@@ -22,7 +22,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Link href={`/products/${product.id}`} className="group">
+    <Link href={`/products/${product.id}`} className="group" data-trigger-loader="true">
       <Card className="h-full flex flex-col transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
         <CardHeader>
           <div className="aspect-square relative overflow-hidden rounded-md">

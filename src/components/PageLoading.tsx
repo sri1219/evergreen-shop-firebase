@@ -25,6 +25,12 @@ export default function PageLoading() {
       }
       
       if (target && target.tagName === 'A') {
+        // Only trigger loader if the link has the data-trigger-loader attribute.
+        const triggerLoader = target.getAttribute('data-trigger-loader');
+        if (triggerLoader !== 'true') {
+          return;
+        }
+
         const href = target.getAttribute('href');
         // Check if it's an internal link
         if (href && href.startsWith('/')) {
