@@ -28,10 +28,10 @@ export default function CartItem({ item }: CartItemProps) {
         <Button variant="outline" size="icon" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
           <Minus className="h-4 w-4" />
         </Button>
-        <Input 
-          type="number" 
-          value={item.quantity} 
-          onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 1)}
+        <Input
+          type="number"
+          value={item.quantity}
+          readOnly
           className="w-14 text-center"
           min="1"
         />

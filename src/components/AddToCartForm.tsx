@@ -25,10 +25,10 @@ export default function AddToCartForm({ product }: AddToCartFormProps) {
         <Button variant="outline" size="icon" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
           <Minus className="h-4 w-4" />
         </Button>
-        <Input 
+        <Input
           type="number"
           value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
+          readOnly
           className="w-16 text-center"
           min="1"
         />
