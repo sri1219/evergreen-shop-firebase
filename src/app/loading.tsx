@@ -1,9 +1,5 @@
-import Spinner from '@/components/Spinner';
-
+// This file is kept for Next.js's built-in loading UI during server-side rendering,
+// but the main client-side loading is handled by components/PageLoading.tsx
 export default function Loading() {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-      <Spinner className="h-16 w-16 text-primary" />
-    </div>
-  );
+  return null;
 }
