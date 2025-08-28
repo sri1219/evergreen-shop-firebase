@@ -27,10 +27,6 @@ const years = Array.from({ length: 10 }, (_, i) => (currentYear + i).toString())
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email." }),
-  address: z.string().min(5, { message: "Address must be at least 5 characters." }),
-  city: z.string().min(2, { message: "City must be at least 2 characters." }),
-  zip: z.string().min(5, { message: "Zip code must be at least 5 characters." }),
   paymentMethod: z.enum(['card', 'paypal', 'gpay'], {
     required_error: "You need to select a payment method.",
   }),
@@ -52,10 +48,6 @@ export default function CheckoutPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      email: "",
-      address: "",
-      city: "",
-      zip: "",
       card: "",
       cvc: "",
     },
@@ -100,45 +92,13 @@ export default function CheckoutPage() {
             <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <FormField control={form.control} name="name" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                    <FormField control={form.control} name="email" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl><Input placeholder="john.doe@example.com" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                  </div>
-                  <FormField control={form.control} name="address" render={({ field }) => (
+                  <FormField control={form.control} name="name" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl><Input placeholder="123 Evergreen Lane" {...field} /></FormControl>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
-                  <div className="grid md:grid-cols-2 gap-6">
-                     <FormField control={form.control} name="city" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>City</FormLabel>
-                        <FormControl><Input placeholder="Greenville" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                     <FormField control={form.control} name="zip" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Zip Code</FormLabel>
-                        <FormControl><Input placeholder="12345" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                  </div>
                   
                   <FormField
                     control={form.control}
