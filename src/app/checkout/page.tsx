@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,6 +19,11 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: 10 }, (_, i) => (currentYear + i).toString());
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -25,8 +31,12 @@ const formSchema = z.object({
   address: z.string().min(5, { message: "Address must be at least 5 characters." }),
   city: z.string().min(2, { message: "City must be at least 2 characters." }),
   zip: z.string().min(5, { message: "Zip code must be at least 5 characters." }),
+  paymentMethod: z.enum(['card', 'paypal', 'gpay'], {
+    required_error: "You need to select a payment method.",
+  }),
   card: z.string().length(16, { message: "Card number must be 16 digits." }),
-  expiry: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, { message: "Expiry must be in MM/YY format." }),
+  expiryMonth: z.string({ required_error: "Please select an expiry month." }),
+  expiryYear: z.string({ required_error: "Please select an expiry year." }),
   cvc: z.string().length(3, { message: "CVC must be 3 digits." }),
 });
 
@@ -47,10 +57,11 @@ export default function CheckoutPage() {
       city: "",
       zip: "",
       card: "",
-      expiry: "",
       cvc: "",
     },
   });
+
+  const paymentMethod = form.watch('paymentMethod');
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -128,29 +139,105 @@ export default function CheckoutPage() {
                       </FormItem>
                     )} />
                   </div>
-                   <FormField control={form.control} name="card" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Card Number</FormLabel>
-                      <FormControl><Input placeholder="•••• •••• •••• ••••" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <FormField control={form.control} name="expiry" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Expiry Date</FormLabel>
-                        <FormControl><Input placeholder="MM/YY" {...field} /></FormControl>
+                  
+                  <FormField
+                    control={form.control}
+                    name="paymentMethod"
+                    render={({ field }) => (
+                      <FormItem className="space-y-3">
+                        <FormLabel>Payment Method</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col space-y-1"
+                          >
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl><RadioGroupItem value="card" /></FormControl>
+                              <FormLabel className="font-normal">Credit Card</FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl><RadioGroupItem value="paypal" /></FormControl>
+                              <FormLabel className="font-normal">PayPal</FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl><RadioGroupItem value="gpay" /></FormControl>
+                              <FormLabel className="font-normal">Google Pay</FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
-                    )} />
-                    <FormField control={form.control} name="cvc" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>CVC</FormLabel>
-                        <FormControl><Input placeholder="123" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                  </div>
+                    )}
+                  />
+
+                  {paymentMethod === 'card' && (
+                    <div className="space-y-8">
+                       <FormField control={form.control} name="card" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Card Number</FormLabel>
+                          <FormControl><Input placeholder="•••• •••• •••• ••••" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <div className="grid md:grid-cols-3 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="expiryMonth"
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-1">
+                              <FormLabel>Expiry Month</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Month" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {Array.from({length: 12}, (_, i) => (
+                                      <SelectItem key={i+1} value={(i+1).toString().padStart(2, '0')}>
+                                          {(i+1).toString().padStart(2, '0')}
+                                      </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                         <FormField
+                          control={form.control}
+                          name="expiryYear"
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-1">
+                              <FormLabel>Expiry Year</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Year" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {years.map(year => (
+                                        <SelectItem key={year} value={year}>{year}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField control={form.control} name="cvc" render={({ field }) => (
+                          <FormItem className="md:col-span-1">
+                            <FormLabel>CVC</FormLabel>
+                            <FormControl><Input placeholder="123" {...field} /></FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                      </div>
+                    </div>
+                  )}
+
                   <Button type="submit" className="w-full" size="lg">Place Order</Button>
                 </form>
               </Form>
