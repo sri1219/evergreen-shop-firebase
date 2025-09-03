@@ -6,7 +6,6 @@ import { products, getCategories } from '@/lib/products';
 import type { Product } from '@/lib/types';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
-import AiRecommendations from '@/components/AiRecommendations';
 
 const categories = ['All', ...getCategories()];
 
@@ -55,10 +54,6 @@ export default function Home() {
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
-        </section>
-
-        <section className="mt-16">
-          <AiRecommendations />
         </section>
       </div>
     </div>
