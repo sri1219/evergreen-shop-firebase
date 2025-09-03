@@ -10,43 +10,16 @@ export default function PageLoading() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // In a static export, there's no client-side navigation that needs a loading spinner
+    // so we can just set loading to false.
+    if (typeof window !== 'undefined' && window.location.protocol === 'file:') {
+        setLoading(false);
+        return;
+    }
+
     setLoading(false);
   }, [pathname, searchParams]);
 
-  // This is a bit of a workaround to show a loading indicator on navigation.
-  // We can't just use `loading.tsx` for instant client-side transitions.
-  // We'll use a link click listener to set loading state.
-  useEffect(() => {
-    const handleLinkClick = (e: MouseEvent) => {
-      // Check if the click is on a Next.js Link or a child of it
-      let target = e.target as HTMLElement;
-      while (target && target.tagName !== 'A') {
-        target = target.parentElement as HTMLElement;
-      }
-      
-      if (target && target.tagName === 'A') {
-        // Only trigger loader if the link has the data-trigger-loader attribute.
-        const triggerLoader = target.getAttribute('data-trigger-loader');
-        if (triggerLoader !== 'true') {
-          return;
-        }
-
-        const href = target.getAttribute('href');
-        // Check if it's an internal link
-        if (href && href.startsWith('/')) {
-            const currentUrl = window.location.pathname + window.location.search;
-            if(href !== currentUrl) {
-                setLoading(true);
-            }
-        }
-      }
-    };
-
-    document.addEventListener('click', handleLinkClick);
-    return () => {
-      document.removeEventListener('click', handleLinkClick);
-    };
-  }, []);
 
   if (!loading) return null;
 

@@ -20,7 +20,7 @@ export default function CartPage() {
         <h1 className="text-3xl font-bold mt-4">Your Cart is Empty</h1>
         <p className="text-muted-foreground mt-2">Looks like you haven't added anything to your cart yet.</p>
         <Button asChild className="mt-6">
-          <Link href="/" data-trigger-loader="true">Start Shopping</Link>
+          <Link href="/">Start Shopping</Link>
         </Button>
       </div>
     );
@@ -59,7 +59,7 @@ export default function CartPage() {
             </CardContent>
             <CardFooter>
               <Button asChild className="w-full" size="lg">
-                <Link href="/checkout" data-trigger-loader="true">Proceed to Checkout</Link>
+                <Link href="/checkout">Proceed to Checkout</Link>
               </Button>
             </CardFooter>
           </Card>

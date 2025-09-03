@@ -24,7 +24,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="h-full flex flex-col transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1 group">
       <CardHeader>
-        <Link href={`/products/${product.id}`} data-trigger-loader="true" className="block aspect-square relative overflow-hidden rounded-md">
+        <Link href={`/products/${product.id}`} className="block aspect-square relative overflow-hidden rounded-md">
             <Image
               src={product.image}
               alt={product.name}
@@ -37,7 +37,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </Link>
       </CardHeader>
       <CardContent className="flex-grow">
-        <Link href={`/products/${product.id}`} data-trigger-loader="true">
+        <Link href={`/products/${product.id}`}>
             <CardTitle className="text-lg font-semibold leading-tight mb-2 hover:underline">{product.name}</CardTitle>
         </Link>
         <p className="text-2xl font-bold text-primary">${product.price.toFixed(2)}</p>
