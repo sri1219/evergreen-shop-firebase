@@ -29,6 +29,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             className="object-cover"
             data-ai-hint="product image"
             sizes="(max-width: 768px) 100vw, 50vw"
+            unoptimized
           />
         </div>
         <div className="flex flex-col justify-center">

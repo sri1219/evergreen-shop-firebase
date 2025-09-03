@@ -11,8 +11,18 @@ export default function AiRecommendations() {
   const { cartItems } = useCart();
   const [recommendations, setRecommendations] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isStaticExport, setIsStaticExport] = useState(false);
 
   useEffect(() => {
+    // This component's AI features will not work in a static export.
+    // We check for `window` to confirm we're on the client-side
+    // and can safely assume a static export if certain conditions apply.
+    // In a real-world scenario, you might use an environment variable.
+    if (typeof window !== 'undefined' && window.location.protocol === 'file:') {
+      setIsStaticExport(true);
+      return;
+    }
+
     async function fetchRecommendations() {
       if (cartItems.length === 0) {
         setRecommendations([]);
@@ -26,13 +36,14 @@ export default function AiRecommendations() {
         setRecommendations(result.recommendations);
       } catch (error) {
         console.error("Failed to get AI recommendations:", error);
+        // This is expected in a static export environment
         setRecommendations([]);
+        setIsStaticExport(true);
       } finally {
         setLoading(false);
       }
     }
 
-    // Debounce the call to avoid too many requests
     const handler = setTimeout(() => {
         fetchRecommendations();
     }, 500);
@@ -44,6 +55,12 @@ export default function AiRecommendations() {
   }, [cartItems]);
 
   if (cartItems.length === 0) {
+    return null;
+  }
+  
+  // Don't render anything if we're in a static export environment
+  // and recommendations can't be fetched.
+  if (isStaticExport && recommendations.length === 0 && !loading) {
     return null;
   }
 
@@ -67,7 +84,11 @@ export default function AiRecommendations() {
             ))}
           </ul>
         ) : (
-          <p className="text-muted-foreground">No recommendations to show right now.</p>
+          <p className="text-muted-foreground">
+            {isStaticExport
+              ? "AI recommendations are not available in this view."
+              : "No recommendations to show right now."}
+          </p>
         )}
       </CardContent>
     </Card>

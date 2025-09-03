@@ -27,6 +27,7 @@ export default function Home() {
           className="object-cover"
           data-ai-hint="green leaves"
           priority
+          unoptimized
         />
         <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center text-center p-4">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 shadow-lg">Welcome to Evergreen Shop</h1>

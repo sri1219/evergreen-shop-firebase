@@ -18,7 +18,7 @@ export default function CartItem({ item }: CartItemProps) {
   return (
     <Card className="flex items-center p-4">
       <div className="relative h-24 w-24 rounded-md overflow-hidden mr-4">
-        <Image src={item.image} alt={item.name} fill className="object-cover" data-ai-hint="product image"/>
+        <Image src={item.image} alt={item.name} fill className="object-cover" data-ai-hint="product image" unoptimized/>
       </div>
       <div className="flex-grow">
         <h3 className="font-semibold">{item.name}</h3>
