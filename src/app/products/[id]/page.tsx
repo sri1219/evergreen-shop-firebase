@@ -1,4 +1,4 @@
-import { getProductById } from '@/lib/products';
+import { getProductById, products } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
@@ -9,6 +9,12 @@ interface ProductPageProps {
   params: {
     id: string;
   };
+}
+
+export async function generateStaticParams() {
+  return products.map(product => ({
+    id: product.id.toString(),
+  }));
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
